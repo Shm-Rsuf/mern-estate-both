@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/features/user/userSlice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { error, loading } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   /* handleChange */
   const handleChange = (event) => {
@@ -21,7 +27,7 @@ const SignIn = () => {
     event.preventDefault();
 
     try {
-      setIsLoading(true);
+      dispatch(signInStart());
       const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -33,16 +39,13 @@ const SignIn = () => {
       const data = await response.json();
 
       if (data.success === false) {
-        setError(data.message);
-        setIsLoading(false);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setIsLoading(false);
-      setError("");
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      setIsLoading(false);
-      setError(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
 
@@ -69,10 +72,10 @@ const SignIn = () => {
         />
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={loading}
           className="bg-slate-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-slate-600 duration-300 cursor-pointer disabled:bg-slate-500 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Loading.." : "Sign In"}
+          {loading ? "Loading.." : "Sign In"}
         </button>
       </form>
 
