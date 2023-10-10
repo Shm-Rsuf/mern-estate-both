@@ -1,11 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
+import UserRouter from "./routes/user.route.js";
+
 dotenv.config();
 
-const app = express();
-
 const port = process.env.PORT || 8000;
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+// routes
+app.use("/api/user", UserRouter);
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -15,5 +23,5 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log(error);
+    console.log("error");
   });
