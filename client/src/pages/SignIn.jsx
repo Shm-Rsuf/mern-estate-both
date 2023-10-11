@@ -7,6 +7,7 @@ import {
   signInSuccess,
 } from "../redux/features/user/userSlice";
 import OAuth from "../components/OAuth";
+import SectionTitle from "../components/shared/SectionTitle";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -52,9 +53,9 @@ const SignIn = () => {
 
   return (
     <div className="p-3 h-screen max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-8">Sign In</h1>
+      <SectionTitle title="Sign In" />
 
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <input
           onChange={handleChange}
           type="email"

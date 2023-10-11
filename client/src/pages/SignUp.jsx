@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import SectionTitle from "../components/shared/SectionTitle";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
@@ -49,9 +50,9 @@ const SignUp = () => {
 
   return (
     <div className="p-3 h-screen max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-8">Sign Up</h1>
+      <SectionTitle title="Sign Up" />
 
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <input
           onChange={handleChange}
           type="text"
