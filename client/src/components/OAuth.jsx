@@ -27,6 +27,7 @@ const OAuth = () => {
       });
 
       const data = await res.json();
+      console.log("google", data);
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {

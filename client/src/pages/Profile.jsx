@@ -1,6 +1,11 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SectionTitle from "../components/shared/SectionTitle";
 import { useEffect, useRef, useState } from "react";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../redux/features/user/userSlice.js";
 import {
   getDownloadURL,
   getStorage,
@@ -10,12 +15,17 @@ import {
 import { app } from "../firebase";
 
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
+
+  /* hooks */
   const [file, setFile] = useState(undefined);
   const [percentage, setPercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [availableFile, setAvailableFile] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  console.log(availableFile);
 
   /* using here useEffect hook */
   useEffect(() => {
@@ -52,11 +62,47 @@ const Profile = () => {
     /* test code */
   };
 
+  /* handleChangeData */
+  const handleChangeData = (event) => {
+    setAvailableFile({
+      ...availableFile,
+      [event.target.id]: event.target.value,
+    });
+  };
+
+  /* handleSubmit */
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      dispatch(updateUserStart());
+
+      const response = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(availableFile),
+      });
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 h-screen max-w-lg mx-auto">
       <SectionTitle title="Profile" />
 
-      <form className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -84,20 +130,25 @@ const Profile = () => {
         </p>
 
         <input
+          onChange={handleChangeData}
           type="text"
           name="username"
           id="username"
           placeholder="username"
+          defaultValue={currentUser.username}
           className="border rounded-md p-2 focus:outline-none"
         />
         <input
+          onChange={handleChangeData}
           type="email"
           name="email"
           id="email"
           placeholder="email"
+          defaultValue={currentUser.email}
           className="border rounded-md p-2 focus:outline-none"
         />
         <input
+          onChange={handleChangeData}
           type="password"
           name="password"
           id="password"
@@ -106,16 +157,22 @@ const Profile = () => {
         />
         <button
           type="submit"
-          disabled={false}
+          disabled={loading}
           className="bg-slate-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-slate-600 duration-300 cursor-pointer disabled:bg-slate-500 disabled:cursor-not-allowed"
         >
-          update
+          {loading ? "Loading" : "update"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-500">Delete an account</span>
         <span className="text-red-500">Sign out</span>
       </div>
+      {error && <p className="text-rose-500 mt-3">{error}</p>}
+      {updateSuccess ? (
+        <p className="text-green-700 mt-3">info successfully uploaded</p>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
