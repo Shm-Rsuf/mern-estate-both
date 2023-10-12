@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import SectionTitle from "../components/shared/SectionTitle";
+import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import {
   deleteUserFailure,
@@ -206,6 +207,14 @@ const Profile = () => {
         >
           {loading ? "Loading" : "update"}
         </button>
+
+        <Link
+          to="/create-listing"
+          disabled={false}
+          className="bg-green-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-green-600 duration-300 cursor-pointer disabled:bg-green-500 disabled:cursor-not-allowed text-center"
+        >
+          create listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span
