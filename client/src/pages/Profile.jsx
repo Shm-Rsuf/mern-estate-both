@@ -2,6 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import SectionTitle from "../components/shared/SectionTitle";
 import { useEffect, useRef, useState } from "react";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -98,6 +101,25 @@ const Profile = () => {
     }
   };
 
+  /* handleDeleteAccount */
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = response.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 h-screen max-w-lg mx-auto">
       <SectionTitle title="Profile" />
@@ -164,8 +186,13 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-500">Delete an account</span>
-        <span className="text-red-500">Sign out</span>
+        <span
+          onClick={handleDeleteAccount}
+          className="text-red-500 cursor-pointer"
+        >
+          Delete account
+        </span>
+        <span className="text-red-500 cursor-pointer">Sign out</span>
       </div>
       {error && <p className="text-rose-500 mt-3">{error}</p>}
       {updateSuccess ? (
