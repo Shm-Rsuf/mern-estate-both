@@ -2,6 +2,21 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const Listing = ({ listing }) => {
+  /* handleLitingDelete */
+  const handleLitingDelete = async (listingId) => {
+    try {
+      const response = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = response.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="border border-gray-300 p-2 rounded-md flex justify-between items-center gap-4">
       <Link to={`/listing/${listing._id}`}>
@@ -20,7 +35,12 @@ const Listing = ({ listing }) => {
       </Link>
 
       <div className="flex flex-col items-center p-2">
-        <button className="text-red-700 font-semibold">Delete</button>
+        <button
+          className="text-red-700 font-semibold"
+          onClick={() => handleLitingDelete(listing._id)}
+        >
+          Delete
+        </button>
         <button className="text-green-700 font-semibold">Edit</button>
       </div>
     </div>
