@@ -20,6 +20,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import Listing from "../components/Listing";
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -32,7 +33,8 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [availableFile, setAvailableFile] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  console.log(availableFile);
+  const [showListingError, setShowListingError] = useState(false);
+  const [userListing, setUserListing] = useState([]);
 
   /* using here useEffect hook */
   useEffect(() => {
@@ -143,6 +145,22 @@ const Profile = () => {
     }
   };
 
+  /* handleShowListings */
+  const handleShowListings = async () => {
+    try {
+      setShowListingError(false);
+      const response = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await response.json();
+      if (data.success === false) {
+        setShowListingError(data.message);
+        return;
+      }
+      setUserListing(data);
+    } catch (error) {
+      setShowListingError(true);
+    }
+  };
+
   return (
     <div className="p-3 h-screen max-w-lg mx-auto">
       <SectionTitle title="Profile" />
@@ -232,6 +250,27 @@ const Profile = () => {
         <p className="text-green-700 mt-3">info successfully uploaded</p>
       ) : (
         ""
+      )}
+
+      <button
+        onClick={handleShowListings}
+        className="text-green-700 w-full mt-5"
+      >
+        Show listings
+      </button>
+      <p className="text-red-700 mt-5">
+        {showListingError ? "Error showing listings" : ""}
+      </p>
+
+      {userListing && userListing.length > 0 && (
+        <div className="">
+          <SectionTitle title="Your listings" />
+          {userListing.map((listing) => (
+            <div key={listing._id} className="flex flex-col my-5">
+              <Listing listing={listing} />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
