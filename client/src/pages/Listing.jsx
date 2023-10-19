@@ -7,9 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // import required modules
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay, Pagination } from "swiper/modules";
 
 import {
   FaBath,
@@ -66,8 +67,20 @@ const Listing = () => {
       )}
 
       {!loading && !error && listing && (
-        <>
-          <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+        <div>
+          <Swiper
+            navigation={true}
+            loop={true}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[Navigation, Autoplay, Pagination]}
+            className="mySwiper"
+          >
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
@@ -155,7 +168,7 @@ const Listing = () => {
             )}
             {contact && <Contact listing={listing} />}
           </div>
-        </>
+        </div>
       )}
     </main>
   );

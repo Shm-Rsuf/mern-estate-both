@@ -7,9 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // import required modules
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import ListingItem from "../components/ListingItem";
 
 const Home = () => {
@@ -78,7 +79,19 @@ const Home = () => {
         </Link>
       </div>
       {/* SWIPER */}
-      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+      <Swiper
+        navigation={true}
+        pagination={{
+          clickable: true,
+        }}
+        loop={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        modules={[Navigation, Autoplay, Pagination]}
+        className="mySwiper"
+      >
         {offerListings &&
           offerListings.length > 0 &&
           offerListings.map((listing) => (
@@ -94,7 +107,7 @@ const Home = () => {
           ))}
       </Swiper>
       {/* RENT, SALE,OFFER */}
-      <div className="max-w-6xl mx-auto px-4 flex flex-col my-10 gap-8">
+      <div className="max-w-6xl mx-auto flex flex-col my-10 gap-8">
         {offerListings && offerListings.length > 0 && (
           <div className="">
             <div>
@@ -150,7 +163,7 @@ const Home = () => {
                 Show more places for sale
               </Link>
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2">
               {saleListings.map((listing) => (
                 <ListingItem key={listing._id} listing={listing} />
               ))}
