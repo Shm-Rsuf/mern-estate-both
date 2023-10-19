@@ -31,6 +31,8 @@ const Listing = () => {
   const [contact, setContact] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
+  console.log("price = ", listing);
+
   useEffect(() => {
     try {
       setLoading(true);
