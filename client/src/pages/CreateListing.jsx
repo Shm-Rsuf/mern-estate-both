@@ -182,7 +182,7 @@ const CreateListing = () => {
             name="name"
             id="name"
             placeholder="Name"
-            maxLength="30"
+            maxLength="50"
             minLength="5"
             required
             className="border rounded-md p-2 focus:outline-none"
