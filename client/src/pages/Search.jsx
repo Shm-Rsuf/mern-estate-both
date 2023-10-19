@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 
 const Search = () => {
+  const navigate = useNavigate();
   const [sideBarData, setSideBarData] = useState({
     searchTerm: "",
     type: "all",
@@ -14,7 +15,9 @@ const Search = () => {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
-  const navigate = useNavigate();
+  const [showMore, setShowMore] = useState(false);
+
+  console.log(listings.length);
 
   /* handleChange */
   const handleChange = (e) => {
@@ -96,12 +99,17 @@ const Search = () => {
       });
     }
 
-    const fetchListing = async () => {
+    const fetchListings = async () => {
       try {
         setLoading(true);
         const searchQuery = urlParams.toString();
         const response = await fetch(`/api/listing/get?${searchQuery}`);
         const data = await response.json();
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
         if (data.success === false) {
           console.log(data.message);
           return;
@@ -113,8 +121,25 @@ const Search = () => {
         setLoading(false);
       }
     };
-    fetchListing();
+    fetchListings();
   }, [location.search]);
+
+  /* showMorehandler */
+  const showMorehandler = async () => {
+    const numOfListing = listings.length;
+    const startIndex = numOfListing;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("startIndex", startIndex);
+    const searchQuery = urlParams.toString();
+
+    const response = await fetch(`/api/listing/get?${searchQuery}`);
+    const data = await response.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+
+    setListings([...listings, ...data]);
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -240,6 +265,15 @@ const Search = () => {
             listings.map((listing) => (
               <ListingItem key={listing._id} listing={listing} />
             ))}
+
+          {showMore && (
+            <button
+              onClick={showMorehandler}
+              className="text-green-700 font-semibold w-full hover:underline duration-300 cursor-pointer mt-5"
+            >
+              Show more
+            </button>
+          )}
         </div>
       </div>
     </div>
