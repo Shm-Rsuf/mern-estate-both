@@ -109,7 +109,7 @@ const Home = () => {
       {/* RENT, SALE,OFFER */}
       <div className="max-w-6xl mx-auto flex flex-col my-10 gap-8">
         {offerListings && offerListings.length > 0 && (
-          <div className="">
+          <div className="px-3 sm:px-0">
             <div>
               <h2 className="text-2xl font-semibold text-slate-700">
                 Recent Offers
@@ -130,7 +130,7 @@ const Home = () => {
         )}
 
         {rentListings && rentListings.length > 0 && (
-          <div className="">
+          <div className="px-3 sm:px-0">
             <div>
               <h2 className="text-2xl font-semibold text-slate-700">
                 Recent places for Rent
@@ -151,7 +151,7 @@ const Home = () => {
         )}
 
         {saleListings && saleListings.length > 0 && (
-          <div className="">
+          <div className="px-3 sm:px-0">
             <div>
               <h2 className="text-2xl font-semibold text-slate-700">
                 Recent places for sale
@@ -163,7 +163,7 @@ const Home = () => {
                 Show more places for sale
               </Link>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="gap-2 flex flex-wrap">
               {saleListings.map((listing) => (
                 <ListingItem key={listing._id} listing={listing} />
               ))}
