@@ -180,137 +180,137 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-3 h-screen max-w-lg mx-auto">
-      <SectionTitle title="Profile" />
+    <div className='p-3 h-screen max-w-lg mx-auto'>
+      <SectionTitle title='Profile' />
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
         <input
           onChange={(e) => setFile(e.target.files[0])}
-          type="file"
-          name="file"
-          id="file"
+          type='file'
+          name='file'
+          id='file'
           ref={fileRef}
           hidden
-          accept="image/*"
+          accept='image/*'
         />
         <img
           onClick={() => fileRef.current.click()}
           src={availableFile.avater || currentUser.avater}
           alt={currentUser.username}
-          className="rounded-full object-cover h-24 w-24 cursor-pointer self-center mt-2"
+          className='rounded-full object-cover h-24 w-24 cursor-pointer self-center mt-2'
         />
 
-        <p className="text-sm self-center">
+        <p className='text-sm self-center'>
           {fileUploadError ? (
-            <span className="text-red-700">error image upload</span>
+            <span className='text-red-700'>error image upload</span>
           ) : percentage > 0 && percentage < 100 ? (
-            <span className="text-slate-700">{`uploading image ${percentage}%`}</span>
+            <span className='text-slate-700'>{`uploading image ${percentage}%`}</span>
           ) : percentage === 100 ? (
-            <span className="text-green-700">image successfully uploaded</span>
+            <span className='text-green-700'>image successfully uploaded</span>
           ) : null}
         </p>
 
         <input
           onChange={handleChangeData}
-          type="text"
-          name="username"
-          id="username"
-          placeholder="username"
+          type='text'
+          name='username'
+          id='username'
+          placeholder='username'
           defaultValue={currentUser.username}
-          className="border rounded-md p-2 focus:outline-none"
+          className='border rounded-md p-2 focus:outline-none'
         />
         <input
           onChange={handleChangeData}
-          type="email"
-          name="email"
-          id="email"
-          placeholder="email"
+          type='email'
+          name='email'
+          id='email'
+          placeholder='email'
           defaultValue={currentUser.email}
-          className="border rounded-md p-2 focus:outline-none"
+          className='border rounded-md p-2 focus:outline-none'
         />
         <input
           onChange={handleChangeData}
-          type="password"
-          name="password"
-          id="password"
-          placeholder="password"
-          className="border rounded-md p-2 focus:outline-none"
+          type='password'
+          name='password'
+          id='password'
+          placeholder='password'
+          className='border rounded-md p-2 focus:outline-none'
         />
         <button
-          type="submit"
+          type='submit'
           disabled={loading}
-          className="bg-slate-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-slate-600 duration-300 cursor-pointer disabled:bg-slate-500 disabled:cursor-not-allowed"
+          className='bg-slate-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-slate-600 duration-300 cursor-pointer disabled:bg-slate-500 disabled:cursor-not-allowed'
         >
           {loading ? "Loading" : "update"}
         </button>
 
         <Link
-          to="/create-listing"
+          to='/create-listing'
           disabled={false}
-          className="bg-green-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-green-600 duration-300 cursor-pointer disabled:bg-green-500 disabled:cursor-not-allowed text-center"
+          className='bg-green-700 text-white p-2 rounded-md uppercase tracking-wide hover:bg-green-600 duration-300 cursor-pointer disabled:bg-green-500 disabled:cursor-not-allowed text-center'
         >
           create listing
         </Link>
       </form>
-      <div className="flex justify-between mt-5">
+      <div className='flex justify-between mt-5'>
         <span
           onClick={handleDeleteAccount}
-          className="text-red-500 cursor-pointer"
+          className='text-red-500 cursor-pointer'
         >
           Delete account
         </span>
-        <span onClick={handleSignOut} className="text-red-500 cursor-pointer">
+        <span onClick={handleSignOut} className='text-red-500 cursor-pointer'>
           Sign out
         </span>
       </div>
-      {error && <p className="text-rose-500 mt-3">{error}</p>}
+      {error && <p className='text-rose-500 mt-3'>{error}</p>}
       {updateSuccess ? (
-        <p className="text-green-700 mt-3">info successfully uploaded</p>
+        <p className='text-green-700 mt-3'>info successfully uploaded</p>
       ) : (
         ""
       )}
 
       <button
         onClick={handleShowListings}
-        className="text-green-700 w-full mt-5"
+        className='text-green-700 w-full mt-5'
       >
         Show listings
       </button>
-      <p className="text-red-700 mt-5">
+      <p className='text-red-700 mt-5'>
         {showListingError ? "Error showing listings" : ""}
       </p>
 
       {userListing && userListing.length > 0 && (
-        <div className="">
-          <SectionTitle title="Your listings" />
+        <div className=''>
+          <SectionTitle title='Your listings' />
           {userListing.map((listing) => (
             <div
               key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+              className='border rounded-lg p-3 flex justify-between items-center gap-4'
             >
               <Link to={`/listing/${listing._id}`}>
                 <img
                   src={listing.imageUrls[0]}
-                  alt="listing cover"
-                  className="h-16 w-16 object-contain"
+                  alt='listing cover'
+                  className='h-16 w-16 object-contain'
                 />
               </Link>
               <Link
-                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
                 to={`/listing/${listing._id}`}
               >
                 <p>{listing.name}</p>
               </Link>
 
-              <div className="flex flex-col item-center">
+              <div className='flex flex-col item-center'>
                 <button
                   onClick={() => handleLitingDelete(listing._id)}
-                  className="text-red-700 uppercase"
+                  className='text-red-700 uppercase'
                 >
                   Delete
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className='text-green-700 uppercase'>Edit</button>
                 </Link>
               </div>
             </div>
